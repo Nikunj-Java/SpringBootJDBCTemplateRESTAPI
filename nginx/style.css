@@ -1,0 +1,16 @@
+h1{
+    color:brown
+}
+p{
+    background-color:royalblue;
+}
+table{
+    border: 1px solid black;
+    background-color: lightgray;
+}
+table th{
+    background-color: darkgray;
+}
+table td{
+    background-color: white;
+}
