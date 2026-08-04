@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Employee Form</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        form {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr) auto;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        input,
+        button {
+            padding: 10px;
+        }
+
+        button {
+            background: #1976d2;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+
+        th {
+            background: #1976d2;
+            color: white;
+        }
+
+        .action-buttons button {
+            margin-right: 5px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>Employee Management</h2>
+
+    <form id="empForm">
+
+        <input id="name" placeholder="Name" required>
+
+        <input id="department" placeholder="Department" required>
+
+        <input id="salary" type="number" placeholder="Salary" required>
+
+        <button type="submit" id="submitBtn">Add Employee</button>
+
+    </form>
+
+    <table>
+
+        <thead>
+
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Department</th>
+            <th>Salary</th>
+            <th>Action</th>
+        </tr>
+
+        </thead>
+
+        <tbody id="userTableBody"></tbody>
+
+    </table>
+
+</div>
+
+<script>
+
+    const apiURL = "http://10.9.71.48:8082/api/v1/employee/";
+
+    let editingEmployeeId = null;
+
+    //------------------------------------
+    // Fetch Employees
+    //------------------------------------
+
+    async function fetchData() {
+
+        try {
+
+            const response = await fetch(apiURL);
+
+            if (!response.ok) {
+                throw new Error("HTTP Error : " + response.status);
+            }
+
+            const responseData = await response.json();
+
+            console.log(responseData);
+
+            const employees = responseData.data || responseData;
+
+            const tableBody = document.getElementById("userTableBody");
+
+            tableBody.innerHTML = "";
+
+            employees.forEach(employee => {
+
+                const row = document.createElement("tr");
+
+                row.innerHTML = `
+                        <td>${employee.id}</td>
+                        <td>${employee.name}</td>
+                        <td>${employee.department}</td>
+                        <td>${employee.salary}</td>
+
+                        <td class="action-buttons">
+
+                            <button onclick="editEmployee(${employee.id},
+                                '${employee.name}',
+                                '${employee.department}',
+                                ${employee.salary})">
+                                Edit
+                            </button>
+
+                            <button onclick="deleteEmployee(${employee.id})">
+                                Delete
+                            </button>
+
+                        </td>
+                    `;
+
+                tableBody.appendChild(row);
+
+            });
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+        }
+
+    }
+
+    //------------------------------------
+    // Add / Update Employee
+    //------------------------------------
+
+    document.getElementById("empForm").addEventListener("submit", function (event) {
+
+        event.preventDefault();
+
+        const newEmployee = {
+
+            name: document.getElementById("name").value,
+
+            department: document.getElementById("department").value,
+
+            salary: Number(document.getElementById("salary").value)
+
+        };
+
+        const method = editingEmployeeId ? "PUT" : "POST";
+
+        const url = editingEmployeeId
+            ? apiURL + editingEmployeeId
+            : apiURL;
+
+        fetch(url, {
+
+            method: method,
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify(newEmployee)
+
+        })
+
+            .then(response => {
+
+                if (!response.ok) {
+                    throw new Error("Unable to save employee");
+                }
+
+                return response.json();
+
+            })
+
+            .then(() => {
+
+                alert(editingEmployeeId
+                    ? "Employee Updated Successfully"
+                    : "Employee Added Successfully");
+
+                document.getElementById("empForm").reset();
+
+                editingEmployeeId = null;
+
+                document.getElementById("submitBtn").innerText = "Add Employee";
+
+                fetchData();
+
+            })
+
+            .catch(error => console.error(error));
+
+    });
+
+    //------------------------------------
+    // Edit Employee
+    //------------------------------------
+
+    function editEmployee(id, name, department, salary) {
+
+        editingEmployeeId = id;
+
+        document.getElementById("name").value = name;
+
+        document.getElementById("department").value = department;
+
+        document.getElementById("salary").value = salary;
+
+        document.getElementById("submitBtn").innerText = "Update Employee";
+
+    }
+
+    //------------------------------------
+    // Delete Employee
+    //------------------------------------
+
+    function deleteEmployee(id) {
+
+        if (!confirm("Delete this employee?"))
+            return;
+
+        fetch(apiURL + id, {
+
+            method: "DELETE"
+
+        })
+
+            .then(() => {
+
+                alert("Employee Deleted Successfully");
+
+                fetchData();
+
+            })
+
+            .catch(error => console.error(error));
+
+    }
+
+    //------------------------------------
+    // Load Data
+    //------------------------------------
+
+    fetchData();
+
+</script>
+
+</body>
+
+</html>

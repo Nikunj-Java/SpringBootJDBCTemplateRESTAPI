@@ -1,0 +1,156 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > Employee</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.neueda.restapi</a>
+</div>
+
+<h1>Coverage Summary for Class: Employee (com.neueda.restapi)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Employee</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    60%
+  </span>
+  <span class="absValue">
+    (6/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    69.2%
+  </span>
+  <span class="absValue">
+    (9/13)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.neueda.restapi;
+&nbsp;
+&nbsp;public class Employee {
+&nbsp;
+&nbsp;
+&nbsp;        private int id;
+&nbsp;        private String name;
+&nbsp;        private String department;
+&nbsp;        private double salary;
+&nbsp;
+<b class="nc">&nbsp;        public Employee() {</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        public Employee(String name, String department, double salary) {</b>
+&nbsp;
+<b class="fc">&nbsp;            this.name = name;</b>
+<b class="fc">&nbsp;            this.department = department;</b>
+<b class="fc">&nbsp;            this.salary = salary;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public int getId() {
+<b class="fc">&nbsp;            return id;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public void setId(int id) {
+<b class="fc">&nbsp;            this.id = id;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public String getName() {
+<b class="fc">&nbsp;            return name;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public void setName(String name) {
+<b class="nc">&nbsp;            this.name = name;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public String getDepartment() {
+<b class="fc">&nbsp;            return department;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public void setDepartment(String department) {
+<b class="nc">&nbsp;            this.department = department;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public double getSalary() {
+<b class="fc">&nbsp;            return salary;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public void setSalary(double salary) {
+<b class="nc">&nbsp;            this.salary = salary;</b>
+&nbsp;        }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-08-04 11:52</div>
+</div>
+</body>
+</html>

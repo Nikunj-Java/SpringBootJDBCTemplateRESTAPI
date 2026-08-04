@@ -1,0 +1,243 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > EmployeeController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.neueda.restapi</a>
+</div>
+
+<h1>Coverage Summary for Class: EmployeeController (com.neueda.restapi)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">EmployeeController</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (34/34)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.neueda.restapi;
+&nbsp;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.http.HttpStatus;
+&nbsp;import org.springframework.http.ResponseEntity;
+&nbsp;import org.springframework.web.bind.annotation.*;
+&nbsp;
+&nbsp;import java.util.HashMap;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Map;
+&nbsp;//
+&nbsp;@RestController
+&nbsp;@RequestMapping(&quot;/api/v1/employee&quot;)
+&nbsp;@CrossOrigin(origins = &quot;http://10.9.71.48:8085&quot;)
+<b class="fc">&nbsp;public class EmployeeController {</b>
+&nbsp;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private EmployeeService service;
+&nbsp;
+&nbsp;    // GET All Employees
+&nbsp;    // i need response in JSON
+&nbsp;    @GetMapping(&quot;/&quot;)
+&nbsp;    public ResponseEntity&lt;Map&lt;String, Object&gt;&gt; getAllEmployees() {
+<b class="fc">&nbsp;        List&lt;Employee&gt; employees = service.getAllEmployees();</b>
+&nbsp;
+<b class="fc">&nbsp;        Map&lt;String, Object&gt; response = new HashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;        response.put(&quot;message&quot;, &quot;Employees fetched successfully&quot;);</b>
+<b class="fc">&nbsp;        response.put(&quot;data&quot;, employees);</b>
+&nbsp;
+<b class="fc">&nbsp;        return ResponseEntity.status(HttpStatus.OK).body(response);</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    // GET Employee By Id
+&nbsp;    @GetMapping(&quot;/{id}&quot;)
+&nbsp;    public ResponseEntity&lt;Map&lt;String, Object&gt;&gt; getEmployee(@PathVariable int id) {
+&nbsp;
+<b class="fc">&nbsp;        Employee employee = service.getEmployeeById(id);</b>
+&nbsp;        // handle employee exception here
+<b class="fc">&nbsp;        if (employee == null) {</b>
+<b class="fc">&nbsp;            throw new EmployeeNotFoundException(</b>
+&nbsp;                    &quot;Employee with ID &quot; + id + &quot; not found&quot;);
+&nbsp;        }
+&nbsp;
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;        Map&lt;String, Object&gt; response = new HashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;        response.put(&quot;message&quot;, &quot;Employee fetched successfully&quot;);</b>
+<b class="fc">&nbsp;        response.put(&quot;data&quot;, employee);</b>
+&nbsp;
+<b class="fc">&nbsp;        return ResponseEntity.ok(response);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // POST Employee
+&nbsp;    @PostMapping(&quot;/&quot;)
+&nbsp;    public ResponseEntity&lt;Map&lt;String, Object&gt;&gt; addEmployee(@RequestBody Employee employee) {
+&nbsp;
+<b class="fc">&nbsp;        int result = service.saveEmployee(employee);</b>
+&nbsp;
+<b class="fc">&nbsp;        if (result &gt; 0) {</b>
+<b class="fc">&nbsp;            return ResponseEntity.status(HttpStatus.CREATED).body(</b>
+<b class="fc">&nbsp;                    Map.of(</b>
+&nbsp;                            &quot;message&quot;, &quot;Employee added successfully&quot;,
+&nbsp;                            &quot;data&quot;, employee
+&nbsp;                    )
+&nbsp;            );
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(</b>
+<b class="fc">&nbsp;                Map.of(</b>
+&nbsp;                        &quot;message&quot;, &quot;Failed to add employee&quot;,
+&nbsp;                        &quot;data&quot;, employee
+&nbsp;                )
+&nbsp;        );
+&nbsp;    }
+&nbsp;
+&nbsp;    // PUT Employee
+&nbsp;    @PutMapping(&quot;/{id}&quot;)
+&nbsp;    public ResponseEntity&lt;Map&lt;String, Object&gt;&gt; updateEmployee(
+&nbsp;            @PathVariable int id,
+&nbsp;            @RequestBody Employee employee) {
+&nbsp;
+<b class="fc">&nbsp;        employee.setId(id);</b>
+&nbsp;
+<b class="fc">&nbsp;        int result = service.updateEmployee(id, employee);</b>
+&nbsp;
+<b class="fc">&nbsp;        if (result &gt; 0) {</b>
+<b class="fc">&nbsp;            return ResponseEntity.ok(</b>
+<b class="fc">&nbsp;                    Map.of(</b>
+&nbsp;                            &quot;message&quot;, &quot;Employee updated successfully&quot;,
+&nbsp;                            &quot;data&quot;, employee
+&nbsp;                    )
+&nbsp;            );
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(</b>
+<b class="fc">&nbsp;                Map.of(</b>
+&nbsp;                        &quot;message&quot;, &quot;Failed to update employee&quot;,
+&nbsp;                        &quot;data&quot;, employee
+&nbsp;                )
+&nbsp;        );
+&nbsp;    }
+&nbsp;
+&nbsp;    // DELETE Employee
+&nbsp;    @DeleteMapping(&quot;/{id}&quot;)
+&nbsp;    public ResponseEntity&lt;Map&lt;String, Object&gt;&gt; deleteEmployee(@PathVariable int id) {
+&nbsp;
+<b class="fc">&nbsp;        int result = service.deleteEmployee(id);</b>
+&nbsp;
+<b class="fc">&nbsp;        if (result &gt; 0) {</b>
+<b class="fc">&nbsp;            return ResponseEntity.ok(</b>
+<b class="fc">&nbsp;                    Map.of(</b>
+&nbsp;                            &quot;message&quot;, &quot;Employee deleted successfully&quot;,
+<b class="fc">&nbsp;                            &quot;data&quot;, id</b>
+&nbsp;                    )
+&nbsp;            );
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(</b>
+<b class="fc">&nbsp;                Map.of(</b>
+&nbsp;                        &quot;message&quot;, &quot;Failed to delete employee&quot;,
+<b class="fc">&nbsp;                        &quot;data&quot;, id</b>
+&nbsp;                )
+&nbsp;        );
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-08-04 11:52</div>
+</div>
+</body>
+</html>
