@@ -1,10 +1,11 @@
-const API = "http://localhost:8082/api/v1/employee/"; // Change if needed
+//const API = "http://localhost:8082/api/v1/employee/"; // Change if needed
+const API = "http://10.9.71.48:8082/api/v1/employee/"; // Change if needed
 document.getElementById("saveEmployee").addEventListener("click", saveEmployee);
 let pieChart = null;
 let barChart = null;
 let editingId = null;
 let employees = [];
-//const API = "http://10.9.71.48:8082/api/v1/employee/"; // Change if needed
+
 async function loadEmployees() {
   try {
     const response = await fetch(API);
