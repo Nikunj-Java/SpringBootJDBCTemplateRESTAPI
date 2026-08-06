@@ -1,1 +1,4 @@
-"# SpringBootJDBCTemplateRESTAPI" 
+# Linux Machine
+```
+sudo systemctl mask sleep.target suspend.target hibernate.target hybrid-sleep.target
+```
