@@ -48,6 +48,8 @@ stage('Build React') {
 ```
 ## Step:2 Using Docker Image
 __Step:2__ Using Docker Image
+- Dockefile for React
+- ReactApp/Dockerfile
 ```
 # Stage 1: Build React Application
 FROM node:22-alpine AS builder
@@ -82,4 +84,62 @@ COPY --from=builder /app/dist /usr/share/nginx/html
 EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]
+```
+## Docker Compose
+```
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: mysql_container
+    restart: always
+
+    environment:
+      MYSQL_ROOT_PASSWORD: Neueda@123
+      MYSQL_DATABASE: company
+
+    ports:
+      - "3306:3306"
+
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+    networks:
+      - springboot-network
+
+  springboot-app:
+    build: .
+    container_name: springboot_container
+
+    depends_on:
+      - mysql
+
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      DB_URL: jdbc:mysql://mysql:3306/company
+      DB_USER: root
+      DB_PASS: Neueda@123
+
+    ports:
+      - "8082:8082"
+
+    networks:
+      - springboot-network
+  nginx:
+    build:
+      context: ./ReactApp
+      dockerfile: Dockerfile
+    container_name: nginx-server
+    ports:
+      - "8085:80"
+    depends_on:
+      - springboot-app
+    networks:
+      - springboot-network
+volumes:
+  mysql-data:
+
+networks:
+  springboot-network:
 ```
