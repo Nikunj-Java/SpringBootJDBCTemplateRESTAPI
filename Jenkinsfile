@@ -21,6 +21,18 @@ pipeline {
                 sh 'mvn clean package -DskipTests'
             }
         }
+        stage('Build React') {
+            steps {
+                dir('ReactApp') {
+                    sh '''
+                        npm install
+                        npm run build
+                        ls -la
+                        ls -la dist
+                    '''
+                }
+            }
+        }
         
 
         stage('Stop Existing Containers') {
