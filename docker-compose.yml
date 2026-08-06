@@ -39,7 +39,7 @@ services:
       - springboot-network
   nginx:
     build:
-      context: ./ReactApp
+      context: ./nginx
       dockerfile: Dockerfile
     container_name: nginx-server
     ports:
